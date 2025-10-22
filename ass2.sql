@@ -93,3 +93,14 @@ where
 group by c.cocktail_id, c.name
 order by global_popularity desc
 limit 10;
+
+-- The core issue was slow query performance on millions of rows due to inefficient calculation and scanning. Our goal was to achieve identical results but at high speed.
+
+-- Key Optimization Methods:
+-- CTEs (Common Table Expressions): We replaced the slow, repeated subquery for AVG(cost_usd) with a WITH block. This forces the average to be calculated once and materialized, converting a bottleneck into a simple, fast JOIN. 
+-- Query Rewriting: We ensured the date filter uses a static constant ('2024-10-01'). This allows the optimizer to perform a rapid Index Range Scan on our composite index, rather than a full table scan.
+-- Targeted Indexing: We created three specific indexes to support every WHERE, JOIN, and ORDER BY condition.
+-- Bonus Hint: We added /*+ JOIN_FIXED_ORDER(...) */ to override the optimizer and guarantee the best possible join sequence, starting with the smallest, pre-calculated results.
+
+-- Conclusion
+-- The EXPLAIN ANALYZE confirms our success: the optimized query shifts execution from slow Full Scans and filesort to high-speed Index Range Access.
