@@ -54,7 +54,7 @@ CROSS JOIN (
 WHERE 
     c.category = 'classic'
     AND ru.usage_date >= '2024-10-01' 
-    AND i.cost_usd > avg_cost.global_cost -- Використовуємо єдине обчислене значення
+    AND i.cost_usd > avg_cost.global_cost
 GROUP BY 
     c.cocktail_id, c.name
 ORDER BY 
