@@ -65,12 +65,15 @@ LIMIT 10;
 -- indexes
 create index idx_cocktails_category_popularity
 on cocktails(category, popularity_score); -- makes quicker WHERE c.category and ORDER BY popularity score
+drop index idx_cocktails_category_popularity on cocktails;
 
 create index idx_ingredient_cost
 on ingredients(cost_usd); -- makes quicker scan for i.cost_usd > averege_cost
+drop index idx_ingredient_cost on indredients;
 
 create index idx_cocktails_usage_date
 on recipeUsage(cocktail_id, usage_date); -- more effective JOIN on cocktail_id and scan on usage_date
+drop index idx_cocktails_usage_date on recipeUsage;
 
 -- optimised query
 -- explain analyze
